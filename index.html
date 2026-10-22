@@ -392,8 +392,11 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONTROL NATIVO -->
+    <!-- SCRIPT DE CONTROL CON CONEXIÓN A GOOGLE SHEETS -->
     <script>
+        // PEGA AQUÍ LA URL DE TU APLICACIÓN WEB DE GOOGLE APPS SCRIPT
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwgIheFLvAS-2Ulwa84lc1ZfSvKoFbVQyisGocKQEbs63sO2s6oS4OBmivgf6js8LVE/exec";
+
         let state = {
             currentTab: 'dashboard',
             claims: JSON.parse(localStorage.getItem('conami_claims')) || [],
@@ -446,7 +449,6 @@
             document.getElementById('headerRole').innerText = state.user.role;
             document.getElementById('headerInitials').innerText = state.user.initials;
 
-            // Inputs en parámetros
             document.getElementById('paramImf').value = state.user.imfCompanyName;
             document.getElementById('paramMainTitle').value = state.user.mainTitle;
             document.getElementById('paramFormTitle').value = state.user.formTitle;
@@ -550,6 +552,7 @@
         function handleRegister(e) {
             e.preventDefault();
             const newClaim = {
+                action: "guardarReclamo",
                 id: `REC-2026-${String(state.claims.length + 1).padStart(3, '0')}`,
                 clientName: document.getElementById('regClientName').value,
                 docNumber: document.getElementById('regDocNumber').value,
@@ -558,12 +561,29 @@
                 status: 'Recibido',
                 description: document.getElementById('regDescription').value
             };
+
+            // 1. Guardar localmente para mostrar de inmediato en pantalla
             state.claims.unshift(newClaim);
             localStorage.setItem('conami_claims', JSON.stringify(state.claims));
             renderTable();
             updateStats();
             switchTab('bandeja');
-            showToast('Registrado', `Expediente ${newClaim.id} creado.`);
+            showToast('Registrado', `Expediente ${newClaim.id} creado localmente.`);
+
+            // 2. Enviar a Google Sheets en Google Drive
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newClaim)
+            })
+            .then(() => {
+                showToast('Sincronizado', `Expediente ${newClaim.id} guardado en Google Drive.`);
+            })
+            .catch(err => {
+                console.error("Error al sincronizar con Google Drive:", err);
+            });
+
             e.target.reset();
             document.getElementById('regDate').value = new Date().toISOString().split('T')[0];
         }
