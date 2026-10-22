@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Atención al Usuario, Quejas y Sugerencias | CONAMI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 antialiased">
+
+    <!-- BARRA SUPERIOR INSTITUCIONAL -->
+    <header class="bg-slate-900 text-white shadow-md z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-sky-600 p-2 rounded-lg text-white">
+                    <i class="fa-solid fa-building-columns text-xl"></i>
+                </div>
+                <div>
+                    <span id="headerImf" class="text-xs uppercase tracking-wider text-slate-400 font-semibold block">FDL • CONAMI</span>
+                    <h1 class="text-base sm:text-lg font-bold tracking-tight">Atención al Usuario, Quejas y Sugerencias</h1>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 border-l border-slate-700 pl-4">
+                    <div class="text-right hidden md:block">
+                        <p id="headerName" class="text-xs font-semibold text-slate-200">Lic. Karla Mendoza</p>
+                        <p id="headerRole" class="text-[10px] text-slate-400">Oficial de Atención (IFIM / CONAMI)</p>
+                    </div>
+                    <div id="headerInitials" class="w-9 h-9 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold border border-slate-600 shadow-inner">
+                        KM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR (TABS) -->
+    <div class="bg-white border-b border-slate-200 shadow-xs z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-1 sm:space-x-3 overflow-x-auto">
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn flex items-center space-x-2 py-4 px-3 border-b-2 font-medium text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer border-sky-600 text-sky-600 bg-sky-50/50">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard Ejecutivo</span>
+            </button>
+            <button onclick="switchTab('registro')" id="btn-registro" class="tab-btn flex items-center space-x-2 py-4 px-3 border-b-2 font-medium text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer border-transparent text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-file-circle-plus"></i>
+                <span>Nuevo Reclamo</span>
+            </button>
+            <button onclick="switchTab('bandeja')" id="btn-bandeja" class="tab-btn flex items-center space-x-2 py-4 px-3 border-b-2 font-medium text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer border-transparent text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-folder-tree"></i>
+                <span>Gestión y Workflow</span>
+                <span id="badgeClaims" class="ml-1.5 bg-slate-200 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-full">0</span>
+            </button>
+            <button onclick="switchTab('sugerencias')" id="btn-sugerencias" class="tab-btn flex items-center space-x-2 py-4 px-3 border-b-2 font-medium text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer border-transparent text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-lightbulb"></i>
+                <span>Buzón de Sugerencias</span>
+            </button>
+            <button onclick="switchTab('reportes')" id="btn-reportes" class="tab-btn flex items-center space-x-2 py-4 px-3 border-b-2 font-medium text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer border-transparent text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-file-excel"></i>
+                <span>Reportería e Indicadores</span>
+            </button>
+            <button onclick="switchTab('parametros')" id="btn-parametros" class="tab-btn flex items-center space-x-2 py-4 px-3 border-b-2 font-medium text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer border-transparent text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-gear"></i>
+                <span>Parámetros del Sistema</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 overflow-y-auto space-y-6">
+
+        <!-- TAB 1: DASHBOARD -->
+        <div id="tab-dashboard" class="tab-content space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-2 gap-2">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Resumen Ejecutivo y Estadísticas</h2>
+                    <p class="text-xs text-slate-500">Monitoreo general de atenciones, reclamos admitidos e indicadores regulatorios CONAMI.</p>
+                </div>
+                <div>
+                    <button onclick="switchTab('registro')" class="bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl hover:bg-slate-800 transition shadow-sm flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-plus"></i> Registrar Nuevo Caso
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-2">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Reclamos (Mes)</span>
+                    <p id="statTotal" class="text-3xl font-extrabold text-slate-900">0</p>
+                </div>
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-2">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">En Análisis / Trámite</span>
+                    <p id="statPendiente" class="text-3xl font-extrabold text-slate-900">0</p>
+                </div>
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-2">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Casos Resueltos</span>
+                    <p id="statResuelto" class="text-3xl font-extrabold text-slate-900">0</p>
+                </div>
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-2">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tiempo Prom. Resolución</span>
+                    <p class="text-3xl font-extrabold text-slate-900">-- Días</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: REGISTRO -->
+        <div id="tab-registro" class="tab-content space-y-6" style="display: none;">
+            <div class="pb-2 border-b border-slate-100">
+                <h2 class="text-xl font-bold text-slate-900">Formulario Único de Registro - CONAMI / IFIM</h2>
+                <p class="text-xs text-slate-500">Capture los datos de identificación, hechos reportados y validaciones normativas obligatorias.</p>
+            </div>
+
+            <form onsubmit="handleRegister(event)" class="space-y-6 text-xs bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2 border-b border-slate-200 pb-2">
+                        <i class="fa-solid fa-user-shield text-sky-600"></i> 1. Datos de Identificación del Usuario
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Nombres y Apellidos *</label>
+                            <input type="text" id="regClientName" required class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600" placeholder="Ej. Juan Carlos Pérez">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Tipo de Documento *</label>
+                            <select id="regDocType" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600">
+                                <option value="Cedula">Cédula de Identidad</option>
+                                <option value="Pasaporte">Pasaporte</option>
+                                <option value="Residencia">Cédula de Residencia</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Número de Documento *</label>
+                            <input type="text" id="regDocNumber" required class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600" placeholder="Ej. 001-000000-0000A">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Departamento *</label>
+                            <select id="regDepartment" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600">
+                                <option value="Managua">Managua</option>
+                                <option value="Matagalpa">Matagalpa</option>
+                                <option value="Esteli">Estelí</option>
+                                <option value="Leon">León</option>
+                                <option value="Chinandega">Chinandega</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Municipio *</label>
+                            <input type="text" id="regMunicipality" required class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600" placeholder="Ej. Managua">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Teléfono</label>
+                            <input type="text" id="regPhone" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600" placeholder="+505 0000-0000">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block font-semibold text-slate-700 mb-1">Correo Electrónico *</label>
+                            <input type="email" id="regEmail" required class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600" placeholder="usuario@correo.com">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2 border-b border-slate-200 pb-2">
+                        <i class="fa-solid fa-file-lines text-sky-600"></i> 2. Información del Reclamo
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Fecha *</label>
+                            <input type="date" id="regDate" required class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">IMF Involucrada *</label>
+                            <select id="regImfSelect" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600"></select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Descripción Detallada *</label>
+                        <textarea id="regDescription" rows="4" required class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600" placeholder="Describa los hechos ocurridos..."></textarea>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-3">
+                    <h3 class="font-bold text-amber-900 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-scale-balanced text-amber-600"></i> 3. Validaciones Normativas
+                    </h3>
+                    <div class="space-y-2 text-slate-700">
+                        <label class="flex items-start gap-2.5 cursor-pointer bg-white p-2.5 rounded-lg border border-amber-100">
+                            <input type="checkbox" id="regValid1" required class="mt-0.5 rounded text-sky-600">
+                            <span>Confirmo que este reclamo ya fue presentado formalmente ante la IFIM y agotó el plazo previo.</span>
+                        </label>
+                        <label class="flex items-start gap-2.5 cursor-pointer bg-white p-2.5 rounded-lg border border-amber-100">
+                            <input type="checkbox" id="regValid2" required class="mt-0.5 rounded text-sky-600">
+                            <span>Declaro que el caso no se encuentra en trámite ante otra autoridad ni posee acción judicial pendiente.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="switchTab('dashboard')" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg font-medium hover:bg-slate-300 cursor-pointer">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 bg-sky-600 text-white font-medium rounded-lg hover:bg-sky-700 transition shadow-sm cursor-pointer"><i class="fa-solid fa-floppy-disk mr-1"></i> Registrar Caso</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- TAB 3: BANDEJA -->
+        <div id="tab-bandeja" class="tab-content space-y-6" style="display: none;">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-2 gap-3">
+                <h2 class="text-xl font-bold text-slate-900">Bandeja de Casos y Seguimiento</h2>
+                <input type="text" id="searchBox" oninput="renderTable()" placeholder="Buscar por cliente o cédula..." class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-600 outline-none w-64 shadow-xs">
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
+                <table class="w-full text-left text-xs text-slate-700">
+                    <thead class="bg-slate-50 text-slate-800 uppercase font-bold text-[11px] border-b border-slate-200">
+                        <tr>
+                            <th class="p-3.5">ID Casos</th>
+                            <th class="p-3.5">Reclamante</th>
+                            <th class="p-3.5">IMF Involucrada</th>
+                            <th class="p-3.5">Fecha</th>
+                            <th class="p-3.5">Estado</th>
+                            <th class="p-3.5 text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="claimsTableBody" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 4: SUGERENCIAS -->
+        <div id="tab-sugerencias" class="tab-content space-y-6" style="display: none;">
+            <div class="pb-2 border-b border-slate-100">
+                <h2 class="text-xl font-bold text-slate-900">Buzón de Sugerencias Ciudadanas</h2>
+                <p class="text-xs text-slate-500">Espacio para propuestas de mejora continua.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm">Enviar Sugerencia</h3>
+                    <form onsubmit="handleSuggestion(event)" class="space-y-3 text-xs">
+                        <input type="text" id="sugName" placeholder="Nombre (Opcional)" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        <select id="sugArea" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                            <option value="Atencion en Ventanilla">Atención en Ventanilla</option>
+                            <option value="Plataforma Digital / App">Plataforma Digital / App</option>
+                        </select>
+                        <textarea id="sugDetail" rows="3" required placeholder="Propuesta de mejora..." class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 outline-none"></textarea>
+                        <button type="submit" class="w-full py-2 bg-sky-600 text-white rounded-lg font-medium hover:bg-sky-700 cursor-pointer">Enviar Propuesta</button>
+                    </form>
+                </div>
+                <div class="md:col-span-2 space-y-3" id="suggestionsContainer"></div>
+            </div>
+        </div>
+
+        <!-- TAB 5: REPORTES -->
+        <div id="tab-reportes" class="tab-content space-y-6" style="display: none;">
+            <h2 class="text-xl font-bold text-slate-900">Reportería y Exportación de Datos</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div onclick="showToast('Exportación Exitosa', 'Reporte generado.')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs cursor-pointer hover:border-sky-600">
+                    <h3 class="font-bold text-slate-800"><i class="fa-solid fa-file-excel text-emerald-600 mr-2"></i> Reporte Mensual CONAMI</h3>
+                    <p class="text-slate-500 mt-1">Descargar en formato Excel (.xlsx)</p>
+                </div>
+                <div onclick="showToast('Expediente PDF', 'Compilado correctamente.')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs cursor-pointer hover:border-sky-600">
+                    <h3 class="font-bold text-slate-800"><i class="fa-solid fa-file-pdf text-rose-600 mr-2"></i> Expediente Consolidado</h3>
+                    <p class="text-slate-500 mt-1">Descargar en formato PDF</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: PARÁMETROS -->
+        <div id="tab-parametros" class="tab-content space-y-6" style="display: none;">
+            <div class="pb-2 border-b border-slate-100">
+                <h2 class="text-xl font-bold text-slate-900">Parametrización del Sistema y Catálogos</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm border-b pb-2"><i class="fa-solid fa-user-gear text-sky-600 mr-2"></i> Configuración de Funcionario e IMF</h3>
+                    <form onsubmit="saveParams(event)" class="space-y-3 text-xs">
+                        <div>
+                            <label class="block font-semibold mb-1">Nombre de la IMF *</label>
+                            <input type="text" id="paramImf" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Nombre del Funcionario *</label>
+                            <input type="text" id="paramName" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Cargo *</label>
+                            <input type="text" id="paramRole" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Iniciales (Avatar) *</label>
+                            <input type="text" id="paramInitials" required maxlength="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none uppercase">
+                        </div>
+                        <button type="submit" class="w-full py-2 bg-sky-600 text-white rounded-lg font-medium hover:bg-sky-700 cursor-pointer">Guardar Configuración</button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm border-b pb-2"><i class="fa-solid fa-building-ngo text-sky-600 mr-2"></i> Catálogo de IMF</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="newImfInput" placeholder="Nueva IMF..." class="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none text-xs">
+                        <button type="button" onclick="addImfCatalog()" class="px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-medium cursor-pointer">Agregar</button>
+                    </div>
+                    <div id="imfCatalogList" class="max-h-40 overflow-y-auto space-y-1.5 border border-slate-100 p-2 rounded-xl bg-slate-50 text-xs"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL DE EDICIÓN -->
+    <div id="editModal" class="fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50 text-xs" style="display: none;">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-200">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-slate-900 text-sm">Editar Expediente: <span id="editIdDisplay"></span></h3>
+                <button type="button" onclick="closeEditModal()" class="text-slate-400 hover:text-slate-700 text-base font-bold cursor-pointer">&times;</button>
+            </div>
+            <form onsubmit="handleUpdate(event)" class="space-y-3">
+                <input type="hidden" id="editId">
+                <div>
+                    <label class="block font-semibold mb-1">Nombre del Reclamante</label>
+                    <input type="text" id="editClientName" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Nº Documento</label>
+                    <input type="text" id="editDocNumber" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Estado</label>
+                    <select id="editStatus" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        <option value="Recibido">Recibido</option>
+                        <option value="En análisis">En análisis</option>
+                        <option value="Resuelto">Resuelto</option>
+                        <option value="Escalado CONAMI">Escalado CONAMI</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Descripción</label>
+                    <textarea id="editDescription" rows="3" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none"></textarea>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg cursor-pointer">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-sky-600 text-white rounded-lg cursor-pointer">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg border border-slate-700 flex items-center gap-3 z-50 text-xs" style="display: none;">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <div>
+            <p id="toastTitle" class="font-bold"></p>
+            <p id="toastMsg" class="text-slate-300 text-[11px]"></p>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE CONTROL NATIVO -->
+    <script>
+        let state = {
+            currentTab: 'dashboard',
+            claims: JSON.parse(localStorage.getItem('conami_claims')) || [],
+            suggestions: JSON.parse(localStorage.getItem('conami_suggestions')) || [],
+            imfList: JSON.parse(localStorage.getItem('conami_imfs')) || ['FDL (Fondo de Desarrollo Local)', 'Finarte, S.A.', 'Fundapre'],
+            user: JSON.parse(localStorage.getItem('conami_user')) || {
+                imfCompanyName: 'FDL (Fondo de Desarrollo Local)',
+                name: 'Lic. Karla Mendoza',
+                role: 'Oficial de Atención (IFIM / CONAMI)',
+                initials: 'KM'
+            }
+        };
+
+        function initApp() {
+            document.getElementById('regDate').value = new Date().toISOString().split('T')[0];
+            loadUserUI();
+            loadImfCatalogUI();
+            renderTable();
+            renderSuggestions();
+            updateStats();
+        }
+
+        function switchTab(tabId) {
+            state.currentTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.getElementById('tab-' + tabId).style.display = 'block';
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-sky-600', 'text-sky-600', 'bg-sky-50/50');
+                btn.classList.add('border-transparent', 'text-slate-600');
+            });
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if(activeBtn) {
+                activeBtn.classList.add('border-sky-600', 'text-sky-600', 'bg-sky-50/50');
+                activeBtn.classList.remove('border-transparent', 'text-slate-600');
+            }
+        }
+
+        function loadUserUI() {
+            document.getElementById('headerImf').innerText = state.user.imfCompanyName + ' • CONAMI';
+            document.getElementById('headerName').innerText = state.user.name;
+            document.getElementById('headerRole').innerText = state.user.role;
+            document.getElementById('headerInitials').innerText = state.user.initials;
+
+            document.getElementById('paramImf').value = state.user.imfCompanyName;
+            document.getElementById('paramName').value = state.user.name;
+            document.getElementById('paramRole').value = state.user.role;
+            document.getElementById('paramInitials').value = state.user.initials;
+
+            const select = document.getElementById('regImfSelect');
+            select.innerHTML = '';
+            state.imfList.forEach(imf => {
+                let opt = document.createElement('option');
+                opt.value = imf;
+                opt.innerText = imf;
+                select.appendChild(opt);
+            });
+        }
+
+        function loadImfCatalogUI() {
+            const container = document.getElementById('imfCatalogList');
+            container.innerHTML = '';
+            state.imfList.forEach((imf, idx) => {
+                container.innerHTML += `
+                    <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-slate-200">
+                        <span>${imf}</span>
+                        <button type="button" onclick="deleteImfCatalog(${idx})" class="text-rose-500 hover:text-rose-700 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                    </div>`;
+            });
+        }
+
+        function addImfCatalog() {
+            const val = document.getElementById('newImfInput').value.trim();
+            if(val) {
+                state.imfList.push(val);
+                localStorage.setItem('conami_imfs', JSON.stringify(state.imfList));
+                document.getElementById('newImfInput').value = '';
+                loadImfCatalogUI();
+                loadUserUI();
+                showToast('IMF Agregada', 'Se añadió correctamente.');
+            }
+        }
+
+        function deleteImfCatalog(idx) {
+            if(state.imfList.length > 1) {
+                state.imfList.splice(idx, 1);
+                localStorage.setItem('conami_imfs', JSON.stringify(state.imfList));
+                loadImfCatalogUI();
+                loadUserUI();
+                showToast('IMF Eliminada', 'Removida del catálogo.');
+            } else {
+                alert('Debe mantener al menos una IMF.');
+            }
+        }
+
+        function saveParams(e) {
+            e.preventDefault();
+            state.user = {
+                imfCompanyName: document.getElementById('paramImf').value,
+                name: document.getElementById('paramName').value,
+                role: document.getElementById('paramRole').value,
+                initials: document.getElementById('paramInitials').value.toUpperCase()
+            };
+            localStorage.setItem('conami_user', JSON.stringify(state.user));
+            loadUserUI();
+            showToast('Actualizado', 'Configuración guardada con éxito.');
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const newClaim = {
+                id: `REC-2026-${String(state.claims.length + 1).padStart(3, '0')}`,
+                clientName: document.getElementById('regClientName').value,
+                docNumber: document.getElementById('regDocNumber').value,
+                imfName: document.getElementById('regImfSelect').value,
+                claimDate: document.getElementById('regDate').value,
+                status: 'Recibido',
+                description: document.getElementById('regDescription').value
+            };
+            state.claims.unshift(newClaim);
+            localStorage.setItem('conami_claims', JSON.stringify(state.claims));
+            renderTable();
+            updateStats();
+            switchTab('bandeja');
+            showToast('Registrado', `Expediente ${newClaim.id} creado.`);
+            e.target.reset();
+            document.getElementById('regDate').value = new Date().toISOString().split('T')[0];
+        }
+
+        function renderTable() {
+            const q = document.getElementById('searchBox') ? document.getElementById('searchBox').value.toLowerCase() : '';
+            const tbody = document.getElementById('claimsTableBody');
+            tbody.innerHTML = '';
+            
+            const filtered = state.claims.filter(c => c.clientName.toLowerCase().includes(q) || c.docNumber.includes(q) || c.id.toLowerCase().includes(q));
+
+            document.getElementById('badgeClaims').innerText = state.claims.length;
+
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 italic">No hay registros actuales.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(c => {
+                let badgeColor = 'bg-sky-100 text-sky-800';
+                if(c.status === 'En análisis') badgeColor = 'bg-amber-100 text-amber-800';
+                if(c.status === 'Resuelto') badgeColor = 'bg-emerald-100 text-emerald-800';
+                if(c.status === 'Escalado CONAMI') badgeColor = 'bg-purple-100 text-purple-800';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3.5 font-bold text-sky-600">${c.id}</td>
+                        <td class="p-3.5"><div class="font-bold text-slate-900">${c.clientName}</div><div class="text-[10px] text-slate-400">${c.docNumber}</div></td>
+                        <td class="p-3.5">${c.imfName}</td>
+                        <td class="p-3.5 text-slate-500">${c.claimDate}</td>
+                        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${badgeColor}">${c.status}</span></td>
+                        <td class="p-3.5 text-right space-x-1">
+                            <button onclick="openEdit('${c.id}')" class="px-2.5 py-1.5 bg-sky-50 text-sky-700 rounded-lg hover:bg-sky-100 cursor-pointer" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteClaim('${c.id}')" class="px-2.5 py-1.5 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 cursor-pointer" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('statTotal').innerText = state.claims.length;
+            document.getElementById('statPendiente').innerText = state.claims.filter(c => c.status === 'En análisis' || c.status === 'Recibido').length;
+            document.getElementById('statResuelto').innerText = state.claims.filter(c => c.status === 'Resuelto').length;
+        }
+
+        function deleteClaim(id) {
+            if(confirm('¿Eliminar este expediente?')) {
+                state.claims = state.claims.filter(c => c.id !== id);
+                localStorage.setItem('conami_claims', JSON.stringify(state.claims));
+                renderTable();
+                updateStats();
+                showToast('Eliminado', 'El caso fue borrado.');
+            }
+        }
+
+        function openEdit(id) {
+            const c = state.claims.find(x => x.id === id);
+            if(c) {
+                document.getElementById('editId').value = c.id;
+                document.getElementById('editIdDisplay').innerText = c.id;
+                document.getElementById('editClientName').value = c.clientName;
+                document.getElementById('editDocNumber').value = c.docNumber;
+                document.getElementById('editStatus').value = c.status;
+                document.getElementById('editDescription').value = c.description;
+                document.getElementById('editModal').style.display = 'flex';
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function handleUpdate(e) {
+            e.preventDefault();
+            const id = document.getElementById('editId').value;
+            const c = state.claims.find(x => x.id === id);
+            if(c) {
+                c.clientName = document.getElementById('editClientName').value;
+                c.docNumber = document.getElementById('editDocNumber').value;
+                c.status = document.getElementById('editStatus').value;
+                c.description = document.getElementById('editDescription').value;
+                localStorage.setItem('conami_claims', JSON.stringify(state.claims));
+                renderTable();
+                updateStats();
+                closeEditModal();
+                showToast('Actualizado', 'Cambios guardados con éxito.');
+            }
+        }
+
+        function handleSuggestion(e) {
+            e.preventDefault();
+            state.suggestions.unshift({
+                id: Date.now(),
+                name: document.getElementById('sugName').value || 'Anónimo',
+                area: document.getElementById('sugArea').value,
+                date: new Date().toISOString().split('T')[0],
+                detail: document.getElementById('sugDetail').value
+            });
+            localStorage.setItem('conami_suggestions', JSON.stringify(state.suggestions));
+            renderSuggestions();
+            showToast('Sugerencia', 'Enviada correctamente.');
+            e.target.reset();
+        }
+
+        function renderSuggestions() {
+            const container = document.getElementById('suggestionsContainer');
+            container.innerHTML = '';
+            if(state.suggestions.length === 0) {
+                container.innerHTML = `<div class="bg-white p-6 rounded-2xl border text-center text-slate-400 text-xs">No hay sugerencias.</div>`;
+                return;
+            }
+            state.suggestions.forEach(s => {
+                container.innerHTML += `
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-xs space-y-1 shadow-xs">
+                        <div class="font-bold flex justify-between"><span>${s.area}</span><span class="text-slate-400 text-[10px]">${s.date}</span></div>
+                        <p class="text-slate-600">${s.detail}</p>
+                        <div class="text-[10px] text-sky-600 font-semibold pt-1">Autor: ${s.name}</div>
+                    </div>`;
+            });
+        }
+
+        function showToast(title, msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastMsg').innerText = msg;
+            t.style.display = 'flex';
+            setTimeout(() => { t.style.display = 'none'; }, 3500);
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
