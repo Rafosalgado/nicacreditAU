@@ -20,7 +20,7 @@
                 </div>
                 <div>
                     <span id="headerImf" class="text-xs uppercase tracking-wider text-slate-400 font-semibold block">FDL • CONAMI</span>
-                    <h1 class="text-base sm:text-lg font-bold tracking-tight">Atención al Usuario, Quejas y Sugerencias</h1>
+                    <h1 id="headerMainTitle" class="text-base sm:text-lg font-bold tracking-tight">Atención al Usuario, Quejas y Sugerencias</h1>
                 </div>
             </div>
             <div class="flex items-center space-x-4">
@@ -75,8 +75,8 @@
         <div id="tab-dashboard" class="tab-content space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-2 gap-2">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">Resumen Ejecutivo y Estadísticas</h2>
-                    <p class="text-xs text-slate-500">Monitoreo general de atenciones, reclamos admitidos e indicadores regulatorios CONAMI.</p>
+                    <h2 id="dashTitleDisplay" class="text-xl font-bold text-slate-900">Resumen Ejecutivo y Estadísticas</h2>
+                    <p id="dashSubDisplay" class="text-xs text-slate-500">Monitoreo general de atenciones, reclamos admitidos e indicadores regulatorios CONAMI.</p>
                 </div>
                 <div>
                     <button onclick="switchTab('registro')" class="bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl hover:bg-slate-800 transition shadow-sm flex items-center gap-2 cursor-pointer">
@@ -108,8 +108,8 @@
         <!-- TAB 2: REGISTRO -->
         <div id="tab-registro" class="tab-content space-y-6" style="display: none;">
             <div class="pb-2 border-b border-slate-100">
-                <h2 class="text-xl font-bold text-slate-900">Formulario Único de Registro - CONAMI / IFIM</h2>
-                <p class="text-xs text-slate-500">Capture los datos de identificación, hechos reportados y validaciones normativas obligatorias.</p>
+                <h2 id="formTitleDisplay" class="text-xl font-bold text-slate-900">Formulario Único de Registro - CONAMI / IFIM</h2>
+                <p id="formSubDisplay" class="text-xs text-slate-500">Capture los datos de identificación, hechos reportados y validaciones normativas obligatorias.</p>
             </div>
 
             <form onsubmit="handleRegister(event)" class="space-y-6 text-xs bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
@@ -205,7 +205,7 @@
         <!-- TAB 3: BANDEJA -->
         <div id="tab-bandeja" class="tab-content space-y-6" style="display: none;">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-2 gap-3">
-                <h2 class="text-xl font-bold text-slate-900">Bandeja de Casos y Seguimiento</h2>
+                <h2 id="bandejaTitleDisplay" class="text-xl font-bold text-slate-900">Bandeja de Casos y Seguimiento</h2>
                 <input type="text" id="searchBox" oninput="renderTable()" placeholder="Buscar por cliente o cédula..." class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-600 outline-none w-64 shadow-xs">
             </div>
 
@@ -229,7 +229,7 @@
         <!-- TAB 4: SUGERENCIAS -->
         <div id="tab-sugerencias" class="tab-content space-y-6" style="display: none;">
             <div class="pb-2 border-b border-slate-100">
-                <h2 class="text-xl font-bold text-slate-900">Buzón de Sugerencias Ciudadanas</h2>
+                <h2 id="sugTitleDisplay" class="text-xl font-bold text-slate-900">Buzón de Sugerencias Ciudadanas</h2>
                 <p class="text-xs text-slate-500">Espacio para propuestas de mejora continua.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -251,7 +251,7 @@
 
         <!-- TAB 5: REPORTES -->
         <div id="tab-reportes" class="tab-content space-y-6" style="display: none;">
-            <h2 class="text-xl font-bold text-slate-900">Reportería y Exportación de Datos</h2>
+            <h2 id="repTitleDisplay" class="text-xl font-bold text-slate-900">Reportería y Exportación de Datos</h2>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                 <div onclick="showToast('Exportación Exitosa', 'Reporte generado.')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs cursor-pointer hover:border-sky-600">
                     <h3 class="font-bold text-slate-800"><i class="fa-solid fa-file-excel text-emerald-600 mr-2"></i> Reporte Mensual CONAMI</h3>
@@ -267,15 +267,32 @@
         <!-- TAB 6: PARÁMETROS -->
         <div id="tab-parametros" class="tab-content space-y-6" style="display: none;">
             <div class="pb-2 border-b border-slate-100">
-                <h2 class="text-xl font-bold text-slate-900">Parametrización del Sistema y Catálogos</h2>
+                <h2 class="text-xl font-bold text-slate-900">Parametrización del Sistema y Títulos</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- CONFIGURACIÓN GENERAL Y TÍTULOS -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-                    <h3 class="font-bold text-slate-800 text-sm border-b pb-2"><i class="fa-solid fa-user-gear text-sky-600 mr-2"></i> Configuración de Funcionario e IMF</h3>
+                    <h3 class="font-bold text-slate-800 text-sm border-b pb-2"><i class="fa-solid fa-user-gear text-sky-600 mr-2"></i> Configuración General y Títulos</h3>
                     <form onsubmit="saveParams(event)" class="space-y-3 text-xs">
                         <div>
-                            <label class="block font-semibold mb-1">Nombre de la IMF *</label>
+                            <label class="block font-semibold mb-1">Nombre de la IMF (Header) *</label>
                             <input type="text" id="paramImf" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Título de la Barra Superior *</label>
+                            <input type="text" id="paramMainTitle" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Título del Formulario (Tab 2) *</label>
+                            <input type="text" id="paramFormTitle" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Título del Dashboard (Tab 1) *</label>
+                            <input type="text" id="paramDashTitle" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Título de la Bandeja (Tab 3) *</label>
+                            <input type="text" id="paramBandejaTitle" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
                         </div>
                         <div>
                             <label class="block font-semibold mb-1">Nombre del Funcionario *</label>
@@ -289,24 +306,46 @@
                             <label class="block font-semibold mb-1">Iniciales (Avatar) *</label>
                             <input type="text" id="paramInitials" required maxlength="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none uppercase">
                         </div>
-                        <button type="submit" class="w-full py-2 bg-sky-600 text-white rounded-lg font-medium hover:bg-sky-700 cursor-pointer">Guardar Configuración</button>
+                        <button type="submit" class="w-full py-2 bg-sky-600 text-white rounded-lg font-medium hover:bg-sky-700 cursor-pointer shadow-sm"><i class="fa-solid fa-floppy-disk mr-1"></i> Guardar Configuración y Títulos</button>
                     </form>
                 </div>
 
+                <!-- CATÁLOGO DE IMF -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
                     <h3 class="font-bold text-slate-800 text-sm border-b pb-2"><i class="fa-solid fa-building-ngo text-sky-600 mr-2"></i> Catálogo de IMF</h3>
                     <div class="flex gap-2">
                         <input type="text" id="newImfInput" placeholder="Nueva IMF..." class="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none text-xs">
                         <button type="button" onclick="addImfCatalog()" class="px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-medium cursor-pointer">Agregar</button>
                     </div>
-                    <div id="imfCatalogList" class="max-h-40 overflow-y-auto space-y-1.5 border border-slate-100 p-2 rounded-xl bg-slate-50 text-xs"></div>
+                    <div id="imfCatalogList" class="max-h-64 overflow-y-auto space-y-2 border border-slate-100 p-2 rounded-xl bg-slate-50 text-xs"></div>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- MODAL DE EDICIÓN -->
+    <!-- MODAL DE EDICIÓN DE IMF -->
+    <div id="editImfModal" class="fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50 text-xs" style="display: none;">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-xl border border-slate-200">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-slate-900 text-sm">Editar IMF del Catálogo</h3>
+                <button type="button" onclick="closeEditImfModal()" class="text-slate-400 hover:text-slate-700 text-base font-bold cursor-pointer">&times;</button>
+            </div>
+            <div class="space-y-3">
+                <input type="hidden" id="editImfIndex">
+                <div>
+                    <label class="block font-semibold mb-1">Nombre de la IMF *</label>
+                    <input type="text" id="editImfValue" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none">
+                </div>
+                <div class="flex justify-end gap-2 pt-2 border-t">
+                    <button type="button" onclick="closeEditImfModal()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-lg cursor-pointer">Cancelar</button>
+                    <button type="button" onclick="saveEditedImf()" class="px-3 py-1.5 bg-sky-600 text-white rounded-lg cursor-pointer">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE EXPEDIENTES -->
     <div id="editModal" class="fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50 text-xs" style="display: none;">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -361,7 +400,11 @@
             suggestions: JSON.parse(localStorage.getItem('conami_suggestions')) || [],
             imfList: JSON.parse(localStorage.getItem('conami_imfs')) || ['FDL (Fondo de Desarrollo Local)', 'Finarte, S.A.', 'Fundapre'],
             user: JSON.parse(localStorage.getItem('conami_user')) || {
-                imfCompanyName: 'FDL (GLOBAL INVESTMENTS, SOCIEDAD ANÓNIMA, NICACREDIT • CONAMI)',
+                imfCompanyName: 'GLOBAL INVESTMENTS, SOCIEDAD ANÓNIMA, NICACREDIT • CONAMI',
+                mainTitle: 'Atención al Usuario, Quejas y Sugerencias',
+                formTitle: 'Formulario Único de Registro - CONAMI / IFIM',
+                dashTitle: 'Resumen Ejecutivo y Estadísticas',
+                bandejaTitle: 'Bandeja de Casos y Seguimiento',
                 name: 'Rafael Salgado',
                 role: 'Oficial de Atención (IFIM / CONAMI)',
                 initials: 'RS'
@@ -395,11 +438,20 @@
 
         function loadUserUI() {
             document.getElementById('headerImf').innerText = state.user.imfCompanyName + ' • CONAMI';
+            document.getElementById('headerMainTitle').innerText = state.user.mainTitle;
+            document.getElementById('formTitleDisplay').innerText = state.user.formTitle;
+            document.getElementById('dashTitleDisplay').innerText = state.user.dashTitle;
+            document.getElementById('bandejaTitleDisplay').innerText = state.user.bandejaTitle;
             document.getElementById('headerName').innerText = state.user.name;
             document.getElementById('headerRole').innerText = state.user.role;
             document.getElementById('headerInitials').innerText = state.user.initials;
 
+            // Inputs en parámetros
             document.getElementById('paramImf').value = state.user.imfCompanyName;
+            document.getElementById('paramMainTitle').value = state.user.mainTitle;
+            document.getElementById('paramFormTitle').value = state.user.formTitle;
+            document.getElementById('paramDashTitle').value = state.user.dashTitle;
+            document.getElementById('paramBandejaTitle').value = state.user.bandejaTitle;
             document.getElementById('paramName').value = state.user.name;
             document.getElementById('paramRole').value = state.user.role;
             document.getElementById('paramInitials').value = state.user.initials;
@@ -419,9 +471,12 @@
             container.innerHTML = '';
             state.imfList.forEach((imf, idx) => {
                 container.innerHTML += `
-                    <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-slate-200">
-                        <span>${imf}</span>
-                        <button type="button" onclick="deleteImfCatalog(${idx})" class="text-rose-500 hover:text-rose-700 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                    <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="font-medium text-slate-700">${imf}</span>
+                        <div class="space-x-1">
+                            <button type="button" onclick="openEditImfModal(${idx})" class="px-2 py-1 bg-sky-50 text-sky-700 rounded-lg hover:bg-sky-100 cursor-pointer" title="Editar IMF"><i class="fa-solid fa-pen"></i></button>
+                            <button type="button" onclick="deleteImfCatalog(${idx})" class="px-2 py-1 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 cursor-pointer" title="Eliminar IMF"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                     </div>`;
             });
         }
@@ -438,13 +493,38 @@
             }
         }
 
-        function deleteImfCatalog(idx) {
-            if(state.imfList.length > 1) {
-                state.imfList.splice(idx, 1);
+        function openEditImfModal(idx) {
+            document.getElementById('editImfIndex').value = idx;
+            document.getElementById('editImfValue').value = state.imfList[idx];
+            document.getElementById('editImfModal').style.display = 'flex';
+        }
+
+        function closeEditImfModal() {
+            document.getElementById('editImfModal').style.display = 'none';
+        }
+
+        function saveEditedImf() {
+            const idx = document.getElementById('editImfIndex').value;
+            const newVal = document.getElementById('editImfValue').value.trim();
+            if(newVal && idx !== '') {
+                state.imfList[idx] = newVal;
                 localStorage.setItem('conami_imfs', JSON.stringify(state.imfList));
                 loadImfCatalogUI();
                 loadUserUI();
-                showToast('IMF Eliminada', 'Removida del catálogo.');
+                closeEditImfModal();
+                showToast('IMF Actualizada', 'Cambios guardados con éxito.');
+            }
+        }
+
+        function deleteImfCatalog(idx) {
+            if(state.imfList.length > 1) {
+                if(confirm('¿Desea eliminar esta IMF del catálogo?')) {
+                    state.imfList.splice(idx, 1);
+                    localStorage.setItem('conami_imfs', JSON.stringify(state.imfList));
+                    loadImfCatalogUI();
+                    loadUserUI();
+                    showToast('IMF Eliminada', 'Removida del catálogo.');
+                }
             } else {
                 alert('Debe mantener al menos una IMF.');
             }
@@ -454,13 +534,17 @@
             e.preventDefault();
             state.user = {
                 imfCompanyName: document.getElementById('paramImf').value,
+                mainTitle: document.getElementById('paramMainTitle').value,
+                formTitle: document.getElementById('paramFormTitle').value,
+                dashTitle: document.getElementById('paramDashTitle').value,
+                bandejaTitle: document.getElementById('paramBandejaTitle').value,
                 name: document.getElementById('paramName').value,
                 role: document.getElementById('paramRole').value,
                 initials: document.getElementById('paramInitials').value.toUpperCase()
             };
             localStorage.setItem('conami_user', JSON.stringify(state.user));
             loadUserUI();
-            showToast('Actualizado', 'Configuración guardada con éxito.');
+            showToast('Actualizado', 'Configuración y títulos guardados con éxito.');
         }
 
         function handleRegister(e) {
